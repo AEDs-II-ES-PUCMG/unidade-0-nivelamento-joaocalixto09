@@ -3,7 +3,7 @@ import java.time.LocalDate;
 public class ProdutoPerecivel extends Produto {
 
     private static final double DESCONTO = 0.25;
-    private static final int PROZO_DESCONTO = 7;
+    private static final int PRAZO_DESCONTO = 7;
 
     private LocalDate dataValidade;
 
@@ -18,8 +18,19 @@ public class ProdutoPerecivel extends Produto {
         this.dataValidade = dataValidade;
     }
 
+    public ProdutoPerecivel(String desc, double precoCusto, LocalDate dataValidade) {
+        super(desc, precoCusto);
+
+        if(dataValidade.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("data de validade invalida");
+
+        }
+
+        this.dataValidade = dataValidade;
+    }
+
     @Override
-    public double valorVenda() {
+    public double valorDeVenda() {
 
         LocalDate hoje = LocalDate.now();
 
@@ -27,7 +38,7 @@ public class ProdutoPerecivel extends Produto {
             throw new IllegalStateException("Produto Vencido");
         }
 
-        double valor = super.valorVenda();
+        double valor = super.valorDeVenda();
 
          long dias = java.time.temporal.ChronoUnit.DAYS.between(hoje, dataValidade);
 
