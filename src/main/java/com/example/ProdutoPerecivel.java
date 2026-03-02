@@ -1,4 +1,4 @@
-package main.java.com.example;
+package com.example;
 
 import java.time.LocalDate;
 
@@ -7,55 +7,40 @@ public class ProdutoPerecivel extends Produto {
     private static final double DESCONTO = 0.25;
     private static final int PRAZO_DESCONTO = 7;
 
-    private LocalDate dataValidade;
+    private LocalDate dataDeValidade;
 
-    public ProdutoPerecivel(String desc, double precoCusto, double margemLucro, LocalDate dataValidade) {
+    public ProdutoPerecivel(String desc, double precoCusto, double margemLucro, LocalDate validade) {
         super(desc, precoCusto, margemLucro);
 
-        if(dataValidade.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("data de validade invalida");
-
+        if (validade.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Produto esta vencido!");
         }
 
-        this.dataValidade = dataValidade;
-    }
-
-    public ProdutoPerecivel(String desc, double precoCusto, LocalDate dataValidade) {
-        super(desc, precoCusto);
-
-        if(dataValidade.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("data de validade invalida");
-
-        }
-
-        this.dataValidade = dataValidade;
+        dataDeValidade = validade;
     }
 
     @Override
-    public double valorDeVenda() {
+    public double valorVenda() {
 
-        LocalDate hoje = LocalDate.now();
+        double desconto = 0d;
 
-        if (hoje.isAfter(dataValidade)) {
-            throw new IllegalStateException("Produto Vencido");
+        long diasValidade = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), dataDeValidade);
+
+        if (diasValidade <= PRAZO_DESCONTO) {
+            desconto = DESCONTO;
         }
 
-        double valor = super.valorDeVenda();
-
-         long dias = java.time.temporal.ChronoUnit.DAYS.between(hoje, dataValidade);
-
-         if (dias <= PRAZO_DESCONTO) {
-            valor = valor * (1-DESCONTO);
-         }
-
-         return valor; 
-
+        return (precoCusto * (1 + margemLucro)) * (1 - desconto);
     }
 
-     @Override
+    @Override
     public String toString() {
-        return super.toString() +
-               " | Validade: " + dataValidade;
+
+        java.time.format.DateTimeFormatter formato = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String dados = super.toString();
+        dados += "\nValidade ate " + formato.format(dataDeValidade);
+
+        return dados;
     }
-    
 }

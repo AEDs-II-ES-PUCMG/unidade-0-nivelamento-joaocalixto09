@@ -1,7 +1,7 @@
-package test.java.com.example;
+package com.example;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Locale;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,13 +12,13 @@ public class ProdutoNaoPerecivelTest {
 	
 	@BeforeAll
 	static public void prepare(){
-		Locale.setDefault(new Locale("pt", "BR"));
+		Locale.setDefault(Locale.of("pt", "BR"));
 		produto = new ProdutoNaoPerecivel("Produto teste", 100, 0.1);
 	}
 	
 	@Test
 	public void calculaPrecoCorretamente(){
-		assertEquals(110.0, produto.valorDeVenda(), 0.01);
+		assertEquals(110.0, produto.valorVenda(), 0.01);
 	}
 	
 	@Test

@@ -1,4 +1,4 @@
-package main.java.com.example;
+package com.example;
 
 import java.text.NumberFormat;
 
@@ -53,7 +53,7 @@ public class Produto {
      * Retorna o valor de venda do produto, considerando seu preço de custo e margem de lucro.
      * @return Valor de venda do produto (double, positivo)
      */
-	public double valorDeVenda() {
+	public double valorVenda() {
 		return (precoCusto * (1.0 + margemLucro));
 	}
 	
@@ -67,6 +67,6 @@ public class Produto {
     	
     	NumberFormat moeda = NumberFormat.getCurrencyInstance();
     	
-		return descricao + ": " + moeda.format(valorDeVenda());
+		return descricao + ": " + moeda.format(valorVenda());
 	}
 }
