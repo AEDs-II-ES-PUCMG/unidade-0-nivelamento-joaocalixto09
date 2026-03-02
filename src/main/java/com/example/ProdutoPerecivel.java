@@ -43,4 +43,12 @@ public class ProdutoPerecivel extends Produto {
 
         return dados;
     }
+
+    @Override 
+    public String gerarDadosTexto() {
+        //tipo 2 para pereciveis 
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("2;%s;%.2f;%.2f;%s", descricao, precoCusto, margemLucro, fmt.format(dataDeValidade));
+        
+    }
 }

@@ -1,8 +1,10 @@
 package com.example;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class Produto {
+public abstract class Produto {
 	
 	private static final double MARGEM_PADRAO = 0.2;
 	private String descricao;
@@ -69,4 +71,37 @@ public class Produto {
     	
 		return descricao + ": " + moeda.format(valorVenda());
 	}
+
+     @Override
+     public boolean equals(Object obj) {
+          if (obj instanceof Produto) {
+               Produto outro = (Produto) obj;
+               return this.descricao.equalsIgnoreCase(outro.descricao);
+          }
+          return false;
+     }
+
+     public abstract String gerarDadosTexto();
+
+     public static Produto criarDoTexto(String linha) {
+         Produto novoProduto = null;
+         DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+         String[] atributos = linha.split(";");
+        int tipo = Integer.parseInt(atributos[0]);
+        String desc = atributos[1];
+        double preco = Double.parseDouble(atributos[2]);
+        double margem = Double.parseDouble(atributos[3]);
+
+        if (tipo == 1) { 
+            // Produto Não Perecível 
+            novoProduto = new ProdutoNaoPerecivel(desc, preco, margem);
+        } else if (tipo == 2) { 
+            // Produto Perecível (precisa da data)
+            LocalDate dataDeValidade = LocalDate.parse(atributos[4], formatoData);
+            novoProduto = new ProdutoPerecivel(desc, preco, margem, dataDeValidade);
+        }
+        
+        return novoProduto; 
+     }
+
 }

@@ -14,4 +14,10 @@ public class ProdutoNaoPerecivel extends Produto {
     public double valorVenda() {
         return precoCusto * (1 + margemLucro);
     }
+
+    @Override
+    public String gerarDadosTexto() {
+        //Tipo 1 para não pereciveis
+        return String.format("1;%s;%.2f;%.2f", descricao, precoCusto, margemLucro); 
+    }
 }
